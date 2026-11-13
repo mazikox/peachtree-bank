@@ -5,51 +5,53 @@
 [![Java](https://img.shields.io/badge/Java-17-orange)](https://www.oracle.com/java/)
 [![Machine Learning](https://img.shields.io/badge/ML-Weka%203.8.0-blue)](https://www.cs.waikato.ac.nz/ml/weka/)
 
-Peachtree Bank is a sophisticated **Personal Finance Management (PFM)** application designed to streamline personal financial tracking through intelligent automation and data-driven insights. 
+## Overview
 
-The system leverages a modern Full-stack architecture, integrating a robust Spring Boot backend with a dynamic Angular frontend, complemented by an embedded Machine Learning engine for automated transaction analysis.
+Peachtree Bank is an **individual educational full-stack project** for managing personal finances. I built it to practice designing REST APIs, implementing financial business rules, connecting a Java backend with an Angular frontend and experimenting with transaction categorization.
 
----
+**Stack:** Java 17, Spring Boot 2.7, Spring Data JPA/Hibernate, SQLite, MapStruct, Angular 16 and Weka.
 
-## Key Features
+## Features
 
-- **Advanced Transaction Management**: Comprehensive transaction history with high-performance server-side pagination, multi-criteria filtering, and dynamic sorting.
-- **Intelligent ML Categorization**: Automatic classification of bank transactions (e.g., Health, Food, Transport) powered by a Neural Network engine.
-- **Data-Driven Analytics**: Interactive dashboards featuring real-time data visualization via responsive charts for better financial decision-making.
-- **Multi-Currency Support**: Automated currency conversion and exchange rate handling for cross-account transactions.
-- **Payee & Account Management**: Centralized management of financial entities and liquid assets with real-time balance updates.
+- **Accounts, payees and transactions:** create and manage financial records with balance-related business logic.
+- **Transaction history:** server-side filtering, sorting and pagination.
+- **Multi-currency transfers:** balance validation and currency conversion using an external exchange-rate API.
+- **Transaction categorization:** an experimental Weka Multilayer Perceptron classifier.
+- **Angular frontend:** access backend operations and visualize financial data.
 
----
+## Architecture and technologies
 
-## Technical Stack
+**Backend**
 
-### Backend (Java / Spring Boot)
-- **Framework**: Spring Boot 2.7.13
-- **Data Access**: Spring Data JPA / Hibernate (optimized with Paging & Sorting)
-- **Database**: SQLite (Embedded, high-portability storage)
-- **ML Engine**: Weka 3.8.0 (Multilayer Perceptron implementation)
-- **Data Mapping**: MapStruct (High-performance type-safe bean mapping)
-- **Utilities**: Project Lombok (Boilerplate reduction)
+- Java 17 and Spring Boot 2.7.13
+- REST endpoints and service-layer financial logic
+- Spring Data JPA / Hibernate with SQLite
+- MapStruct for data mapping; Lombok for boilerplate reduction
+- JUnit 5 and Mockito for automated testing
 
-### Frontend (Angular)
-- **Framework**: Angular 16
-- **UI Architecture**: Angular Material Design (Responsive and modular)
-- **Data Visualization**: CanvasJS Charts
-- **Date Utilities**: Moment.js
+**Frontend**
 
----
+- Angular 16 and Angular Material
+- CanvasJS Charts and Moment.js
+- HTTP communication with the Spring Boot API
 
-## API Documentation
+**Machine learning prototype**
 
-Peachtree Bank exposes a full REST API, allowing for seamless integration and automation of financial data.
+- Weka 3.8.0 with Multilayer Perceptron
+- `StringToWordVector` to transform transaction descriptions into features
+- Experimental classification into categories such as food, transport and health
+
+This is a prototype for learning and experimentation, not a production banking or machine learning service. No model accuracy or production performance is claimed here.
+
+## REST API examples
 
 ```bash
-# Fetch paginated transactions
-curl http://localhost:8080/transactions/get?page=0&pageSize=10
+# Get paginated transactions
+curl 'http://localhost:8080/transactions/get?page=0&pageSize=10'
 
-# Add a new transaction
-curl -X POST http://localhost:8080/transactions/add \
-  -H "Content-Type: application/json" \
+# Add a transaction
+curl -X POST 'http://localhost:8080/transactions/add' \
+  -H 'Content-Type: application/json' \
   -d '{
     "title": "Gym Membership",
     "amount": 120.50,
@@ -58,48 +60,35 @@ curl -X POST http://localhost:8080/transactions/add \
     "counterpartyAccount": "67890123456789012345"
   }'
 
-# Get transaction analytics by category
-curl http://localhost:8080/transactions/groupBy?dateFrom=1672531200&dateTo=1704067200
+# Get transaction statistics grouped by category
+curl 'http://localhost:8080/transactions/groupBy?dateFrom=1672531200&dateTo=1704067200'
 
 # Get total account balance
-curl http://localhost:8080/accounts/countBalance
+curl 'http://localhost:8080/accounts/countBalance'
 ```
 
----
+## Run locally
 
-## Technical Deep Dive: ML Integration
+**Prerequisites:** JDK 17, Maven, Node.js 16+ and npm.
 
-One of the project's defining features is its seamless integration with the **Weka** library to automate business processes. 
+**Backend**
 
-- **The Model**: Implements a *Multilayer Perceptron* neural network.
-- **The Pipeline**: Transactions are processed through a `StringToWordVector` filter, enabling the network to classify raw transaction titles into meaningful business domains.
-- **Value Proposition**: By automating categorization, the application significantly reduces friction in user budget management, demonstrating the practical application of AI in fintech.
+```bash
+cd backend/springboot
+mvn clean install
+mvn spring-boot:run
+```
 
----
+**Frontend**
 
-## Getting Started
+```bash
+cd front/peachtreeBank
+npm install
+npm start
+```
 
-### Prerequisites
-- JDK 17
-- Node.js (v16+) & npm
-- Maven
+Open the frontend at `http://localhost:4200`.
 
-### Installation
+## Project context
 
-**Backend Setup**
-1. Navigate to `backend/springboot`.
-2. Build the project: `mvn clean install`.
-3. Run the application: `mvn spring-boot:run`.
-
-**Frontend Setup**
-1. Navigate to `front/peachtreeBank`.
-2. Install dependencies: `npm install`.
-3. Start the development server: `npm start`.
-4. Access the app at `http://localhost:4200`.
-
----
-
-## About the Project
-Developed and refined during professional internships, this project showcases the implementation of modern software architecture patterns and the integration of advanced machine learning algorithms within a enterprise-grade Full-stack environment.
-
-
+Peachtree Bank was developed as a learning project while building my full-stack development skills. It is not a commercial banking product. The repository focuses on application design, REST APIs, business logic, persistence, frontend integration and a small machine learning experiment.
